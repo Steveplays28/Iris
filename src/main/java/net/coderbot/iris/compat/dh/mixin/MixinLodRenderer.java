@@ -51,6 +51,8 @@ public class MixinLodRenderer {
 	@Shadow
 	private boolean deferWaterRendering;
 	@Shadow
+	private DhFramebuffer framebuffer;
+	@Shadow
 	private DHDepthTexture depthTexture;
 	@Shadow
 	private int cachedWidth;
@@ -58,9 +60,6 @@ public class MixinLodRenderer {
 	private int cachedHeight;
 	@Unique
 	private boolean atTranslucent;
-
-	@Unique
-	private int frame;
 
 	@Inject(method = "drawLODs", at = @At("TAIL"))
 	private void setDeferred(IClientLevelWrapper clientLevelWrapper, Mat4f baseModelViewMatrix, Mat4f baseProjectionMatrix, float partialTicks, IProfilerWrapper profiler, CallbackInfo ci) {
@@ -104,6 +103,7 @@ public class MixinLodRenderer {
 
 			return;
 		}
+
 		if (DHCompatInternal.INSTANCE.shouldOverride && DHCompatInternal.INSTANCE.getTranslucentFB() != null) {
 			DepthCopyStrategy.fastest(false).copy(DHCompatInternal.INSTANCE.getSolidFB(), depthTexture.getTextureId(), null, DHCompatInternal.INSTANCE.getDepthTexNoTranslucent(), cachedWidth, cachedHeight);
 			DHCompatInternal.INSTANCE.getTranslucentShader().bind();
