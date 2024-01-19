@@ -51,8 +51,6 @@ public class MixinLodRenderer {
 	@Shadow
 	private boolean deferWaterRendering;
 	@Shadow
-	private DhFramebuffer framebuffer;
-	@Shadow
 	private DHDepthTexture depthTexture;
 	@Shadow
 	private int cachedWidth;
@@ -60,6 +58,9 @@ public class MixinLodRenderer {
 	private int cachedHeight;
 	@Unique
 	private boolean atTranslucent;
+
+	@Unique
+	private int frame;
 
 	@Inject(method = "drawLODs", at = @At("TAIL"))
 	private void setDeferred(IClientLevelWrapper clientLevelWrapper, Mat4f baseModelViewMatrix, Mat4f baseProjectionMatrix, float partialTicks, IProfilerWrapper profiler, CallbackInfo ci) {
