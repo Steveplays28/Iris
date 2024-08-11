@@ -106,6 +106,7 @@ public class ShaderProperties {
 	private ShadowCullState shadowCulling = ShadowCullState.DEFAULT;
 	private OptionalBoolean shadowEnabled = OptionalBoolean.DEFAULT;
 	private OptionalBoolean dhShadowEnabled = OptionalBoolean.DEFAULT;
+	private OptionalBoolean voxyShadowEnabled = OptionalBoolean.DEFAULT;
 	private Optional<ParticleRenderingSettings> particleRenderingSettings = Optional.empty();
 	private OptionalBoolean prepareBeforeShadow = OptionalBoolean.DEFAULT;
 	private List<String> sliderOptions = new ArrayList<>();
@@ -202,6 +203,7 @@ public class ShaderProperties {
 			handleBooleanDirective(key, value, "shadow.enabled", bool -> shadowEnabled = bool);
 			handleBooleanDirective(key, value, "skipAllRendering", bool -> skipAllRendering = bool);
 			handleBooleanDirective(key, value, "dhShadow.enabled", bool -> dhShadowEnabled = bool);
+			handleBooleanDirective(key, value, "voxyShadow.enabled", bool -> voxyShadowEnabled = bool);
 			handleBooleanDirective(key, value, "particles.before.deferred", bool -> {
 				if (bool.orElse(false) && particleRenderingSettings.isEmpty()) {
 					particleRenderingSettings = Optional.of(ParticleRenderingSettings.BEFORE);
@@ -714,6 +716,10 @@ public class ShaderProperties {
 
 	public OptionalBoolean getDhShadowEnabled() {
 		return dhShadowEnabled;
+	}
+
+	public OptionalBoolean getVoxyShadowEnabled() {
+		return voxyShadowEnabled;
 	}
 
 	public CloudSetting getCloudSetting() {

@@ -48,6 +48,9 @@ public enum ProgramId {
 	DhTerrain(ProgramGroup.Dh, "terrain"),
 	DhWater(ProgramGroup.Dh, "water", DhTerrain),
 	DhShadow(ProgramGroup.Dh, "shadow"),
+	VoxyTerrain(ProgramGroup.Voxy, "terrain"),
+	VoxyWater(ProgramGroup.Voxy, "water", VoxyTerrain),
+	VoxyShadow(ProgramGroup.Voxy, "shadow"),
 
 	Final(ProgramGroup.Final, ""),
 	;

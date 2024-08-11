@@ -38,6 +38,7 @@ import net.irisshaders.iris.pipeline.transform.transformer.SodiumTransformer;
 import net.irisshaders.iris.pipeline.transform.transformer.TextureTransformer;
 import net.irisshaders.iris.pipeline.transform.transformer.VanillaCoreTransformer;
 import net.irisshaders.iris.pipeline.transform.transformer.VanillaTransformer;
+import net.irisshaders.iris.pipeline.transform.transformer.VoxyTransformer;
 import net.irisshaders.iris.shaderpack.texture.TextureStage;
 import org.antlr.v4.runtime.Token;
 import org.apache.logging.log4j.LogManager;
@@ -185,6 +186,9 @@ public class TransformPatcher {
 								case DH:
 									DHTransformer.transform(transformer, tree, root, parameters);
 									break;
+								case VOXY:
+									VoxyTransformer.transform(transformer, tree, root, parameters);
+									break;
 								default:
 									throw new UnsupportedOperationException("Unknown patch type: " + parameters.patch);
 							}
@@ -302,6 +306,18 @@ public class TransformPatcher {
 		Object2ObjectMap<Tri<String, TextureType, TextureStage>, String> textureMap) {
 		return transform(name, vertex, geometry, tessControl, tessEval, fragment,
 			new Parameters(Patch.DH, textureMap) {
+				@Override
+				public TextureStage getTextureStage() {
+					return TextureStage.GBUFFERS_AND_SHADOW;
+				}
+			});
+	}
+
+	public static Map<PatchShaderType, String> patchVoxy(
+		String name, String vertex, String tessControl, String tessEval, String geometry, String fragment,
+		Object2ObjectMap<Tri<String, TextureType, TextureStage>, String> textureMap) {
+		return transform(name, vertex, geometry, tessControl, tessEval, fragment,
+			new Parameters(Patch.VOXY, textureMap) {
 				@Override
 				public TextureStage getTextureStage() {
 					return TextureStage.GBUFFERS_AND_SHADOW;

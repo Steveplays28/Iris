@@ -6,6 +6,7 @@ import com.mojang.blaze3d.platform.GlUtil;
 import net.fabricmc.loader.api.FabricLoader;
 import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.compat.dh.DHCompat;
+import net.irisshaders.iris.compat.voxy.VoxyCompat;
 import net.irisshaders.iris.helpers.StringPair;
 import net.irisshaders.iris.pathways.HandRenderer;
 import net.irisshaders.iris.pipeline.WorldRenderingPhase;
@@ -56,6 +57,10 @@ public class StandardMacros {
 
 		if (FabricLoader.getInstance().isModLoaded("distanthorizons") && DHCompat.hasRenderingEnabled()) {
 			define(standardDefines, "DISTANT_HORIZONS");
+		}
+
+		if (FabricLoader.getInstance().isModLoaded("voxy") && VoxyCompat.hasRenderingEnabled()) {
+			define(standardDefines, "VOXY");
 		}
 
 		if (FabricLoader.getInstance().isModLoaded("continuity")) {

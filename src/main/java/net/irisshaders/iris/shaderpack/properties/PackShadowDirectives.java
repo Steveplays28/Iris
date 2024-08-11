@@ -20,6 +20,7 @@ public class PackShadowDirectives {
 
 	private final OptionalBoolean shadowEnabled;
 	private final OptionalBoolean dhShadowEnabled;
+	private final OptionalBoolean voxyShadowEnabled;
 	private final boolean shouldRenderTerrain;
 	private final boolean shouldRenderTranslucent;
 	private final boolean shouldRenderEntities;
@@ -92,6 +93,7 @@ public class PackShadowDirectives {
 		this.cullingState = properties.getShadowCulling();
 		this.shadowEnabled = properties.getShadowEnabled();
 		this.dhShadowEnabled = properties.getDhShadowEnabled();
+		this.voxyShadowEnabled = properties.getVoxyShadowEnabled();
 
 		this.depthSamplingSettings = ImmutableList.of(new DepthSamplingSettings(), new DepthSamplingSettings());
 
@@ -122,6 +124,7 @@ public class PackShadowDirectives {
 		this.colorSamplingSettings = shadowDirectives.colorSamplingSettings;
 		this.shadowEnabled = shadowDirectives.shadowEnabled;
 		this.dhShadowEnabled = shadowDirectives.dhShadowEnabled;
+		this.voxyShadowEnabled = shadowDirectives.voxyShadowEnabled;
 	}
 
 	/**
@@ -288,6 +291,10 @@ public class PackShadowDirectives {
 
 	public OptionalBoolean isDhShadowEnabled() {
 		return dhShadowEnabled;
+	}
+
+	public OptionalBoolean isVoxyShadowEnabled() {
+		return voxyShadowEnabled;
 	}
 
 	public ImmutableList<DepthSamplingSettings> getDepthSamplingSettings() {

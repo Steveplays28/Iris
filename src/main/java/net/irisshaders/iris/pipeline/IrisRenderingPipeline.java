@@ -9,6 +9,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import net.irisshaders.iris.compat.dh.DHCompat;
+import net.irisshaders.iris.compat.voxy.VoxyCompat;
 import net.irisshaders.iris.features.FeatureFlags;
 import net.irisshaders.iris.gl.GLDebug;
 import net.irisshaders.iris.gl.IrisRenderSystem;
@@ -165,6 +166,7 @@ public class IrisRenderingPipeline implements WorldRenderingPipeline, ShaderRend
 	private final ShaderPack pack;
 	private final PackShadowDirectives shadowDirectives;
 	private final DHCompat dhCompat;
+	private final VoxyCompat voxyCompat;
 	private final int stackSize = 0;
 	private final boolean skipAllRendering;
 	private boolean initializedBlockIds;
@@ -370,6 +372,7 @@ public class IrisRenderingPipeline implements WorldRenderingPipeline, ShaderRend
 		};
 
 		this.dhCompat = new DHCompat(this, shadowDirectives.isDhShadowEnabled().orElse(true));
+		this.voxyCompat = new VoxyCompat(this, shadowDirectives.isVoxyShadowEnabled().orElse(true));
 
 		IntFunction<ProgramSamplers> createShadowTerrainSamplers = (programId) -> {
 			ProgramSamplers.Builder builder = ProgramSamplers.builder(programId, IrisSamplers.WORLD_RESERVED_TEXTURE_UNITS);
@@ -1219,6 +1222,7 @@ public class IrisRenderingPipeline implements WorldRenderingPipeline, ShaderRend
 
 		renderTargets.destroy();
 		dhCompat.clearPipeline();
+		voxyCompat.clearPipeline();
 
 		customImages.forEach(GlImage::destroy);
 
@@ -1256,6 +1260,11 @@ public class IrisRenderingPipeline implements WorldRenderingPipeline, ShaderRend
 		return dhCompat;
 	}
 
+	@Override
+	public VoxyCompat getVoxyCompat() {
+		return voxyCompat;
+	}
+
 	protected AbstractTexture getWhitePixel() {
 		return whitePixel;
 	}
@@ -1277,12 +1286,29 @@ public class IrisRenderingPipeline implements WorldRenderingPipeline, ShaderRend
 		return resolver.resolve(ProgramId.DhShadow);
 	}
 
+	public Optional<ProgramSource> getVoxyTerrainShader() {
+		return resolver.resolve(ProgramId.VoxyTerrain);
+	}
+
+	public Optional<ProgramSource> getVoxyWaterShader() {
+		return resolver.resolve(ProgramId.VoxyWater);
+	}
+
+	public Optional<ProgramSource> getVoxyShadowShader() {
+		return resolver.resolve(ProgramId.VoxyShadow);
+	}
+
 	public CustomUniforms getCustomUniforms() {
 		return customUniforms;
 	}
 
 	public GlFramebuffer createDHFramebuffer(ProgramSource sources, boolean trans) {
 		return renderTargets.createDHFramebuffer(trans ? flippedAfterTranslucent : flippedAfterPrepare,
+			sources.getDirectives().getDrawBuffers());
+	}
+
+	public GlFramebuffer createVoxyFramebuffer(ProgramSource sources, boolean trans) {
+		return renderTargets.createVoxyFramebuffer(trans ? flippedAfterTranslucent : flippedAfterPrepare,
 			sources.getDirectives().getDrawBuffers());
 	}
 
@@ -1299,8 +1325,11 @@ public class IrisRenderingPipeline implements WorldRenderingPipeline, ShaderRend
 	}
 
 	public GlFramebuffer createDHFramebufferShadow(ProgramSource sources) {
-
 		return shadowRenderTargets.createDHFramebuffer(ImmutableSet.of(), new int[]{0, 1});
+	}
+
+	public GlFramebuffer createVoxyFramebufferShadow(ProgramSource sources) {
+		return shadowRenderTargets.createVoxyFramebuffer(ImmutableSet.of(), new int[]{0, 1});
 	}
 
 	public boolean hasShadowRenderTargets() {

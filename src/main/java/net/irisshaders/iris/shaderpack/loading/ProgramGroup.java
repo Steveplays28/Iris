@@ -10,7 +10,8 @@ public enum ProgramGroup {
 	Deferred("deferred"),
 	Composite("composite"),
 	Final("final"),
-	Dh("dh");
+	Dh("dh"),
+	Voxy("voxy");
 
 	private final String baseName;
 

@@ -8,6 +8,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.Version;
 import net.irisshaders.iris.compat.dh.DHCompat;
+import net.irisshaders.iris.compat.voxy.VoxyCompat;
 import net.irisshaders.iris.config.IrisConfig;
 import net.irisshaders.iris.gl.GLDebug;
 import net.irisshaders.iris.gl.buffer.ShaderStorageBufferHolder;
@@ -690,7 +691,7 @@ public class Iris {
 	}
 
 	public static boolean loadedIncompatiblePack() {
-		return DHCompat.lastPackIncompatible();
+		return DHCompat.lastPackIncompatible() || VoxyCompat.lastPackIncompatible();
 	}
 
 	/**
@@ -716,6 +717,7 @@ public class Iris {
 		wireframeKeybind = KeyBindingHelper.registerKeyBinding(new KeyMapping("iris.keybind.wireframe", InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), "iris.keybinds"));
 
 		DHCompat.run();
+		VoxyCompat.run();
 
 		try {
 			if (!Files.exists(getShaderpacksDirectory())) {

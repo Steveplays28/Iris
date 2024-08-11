@@ -294,6 +294,18 @@ public class RenderTargets {
 		return framebuffer;
 	}
 
+	public GlFramebuffer createVoxyFramebuffer(ImmutableSet<Integer> stageWritesToAlt, int[] drawBuffers) {
+		if (drawBuffers.length == 0) {
+			return createEmptyFramebuffer();
+		}
+
+		ImmutableSet<Integer> stageWritesToMain = invert(stageWritesToAlt, drawBuffers);
+
+		GlFramebuffer framebuffer = createColorFramebuffer(stageWritesToMain, drawBuffers);
+
+		return framebuffer;
+	}
+
 
 	public GlFramebuffer createGbufferFramebuffer(ImmutableSet<Integer> stageWritesToAlt, int[] drawBuffers) {
 		if (drawBuffers.length == 0) {

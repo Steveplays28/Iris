@@ -2,6 +2,7 @@ package net.irisshaders.iris.pipeline;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import net.irisshaders.iris.compat.dh.DHCompat;
+import net.irisshaders.iris.compat.voxy.VoxyCompat;
 import net.irisshaders.iris.features.FeatureFlags;
 import net.irisshaders.iris.gl.texture.TextureType;
 import net.irisshaders.iris.helpers.Tri;
@@ -84,4 +85,6 @@ public interface WorldRenderingPipeline {
 	float getSunPathRotation();
 
 	DHCompat getDHCompat();
+
+	VoxyCompat getVoxyCompat();
 }
