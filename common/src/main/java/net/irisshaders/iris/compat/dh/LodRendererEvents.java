@@ -270,14 +270,12 @@ public class LodRendererEvents {
 				// config overrides
 				if (instance.shouldOverride) {
 					DhApi.Delayed.configs.graphics().ambientOcclusion().enabled().setValue(false);
-					DhApi.Delayed.configs.graphics().fog().drawMode().setValue(EDhApiFogDrawMode.FOG_DISABLED);
 
 					if (event.value.renderPass == EDhApiRenderPass.OPAQUE_AND_TRANSPARENT) {
 						Iris.logger.error("Unexpected; somehow the Opaque + Translucent pass ran with shaders on.");
 					}
 				} else {
 					DhApi.Delayed.configs.graphics().ambientOcclusion().enabled().clearValue();
-					DhApi.Delayed.configs.graphics().fog().drawMode().clearValue();
 				}
 
 
