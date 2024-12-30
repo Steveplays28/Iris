@@ -88,7 +88,7 @@ public class LodRendererEvents {
 				var isPackInUse = Iris.isPackInUseQuick();
 				var shouldOverride = getInstance().shouldOverride;
 				DhApi.Delayed.renderProxy.setDeferTransparentRendering(isPackInUse && shouldOverride);
-				DhApi.Delayed.configs.graphics().fog().drawMode().setValue(isPackInUse && shouldOverride ? EDhApiFogDrawMode.FOG_DISABLED : EDhApiFogDrawMode.FOG_ENABLED);
+				DhApi.Delayed.configs.graphics().fog().drawMode().setValue(isPackInUse && shouldOverride ? EDhApiFogDrawMode.FOG_DISABLED : null);
 			}
 		};
 
