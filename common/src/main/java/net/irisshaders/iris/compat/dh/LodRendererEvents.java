@@ -40,6 +40,7 @@ public class LodRendererEvents {
 	private static boolean atTranslucent = false;
 	private static int textureWidth;
 	private static int textureHeight;
+	private static boolean wasPackInUsePreviousFrame = false;
 
 
 	// constructor //
@@ -86,9 +87,12 @@ public class LodRendererEvents {
 			@Override
 			public void beforeRender(DhApiCancelableEventParam<DhApiRenderParam> event) {
 				var isPackInUse = Iris.isPackInUseQuick();
-				var shouldOverride = getInstance().shouldOverride;
-				DhApi.Delayed.renderProxy.setDeferTransparentRendering(isPackInUse && shouldOverride);
-				DhApi.Delayed.configs.graphics().fog().drawMode().setValue(isPackInUse && shouldOverride ? EDhApiFogDrawMode.FOG_DISABLED : null);
+				if (wasPackInUsePreviousFrame != isPackInUse) {
+					var shouldOverride = getInstance().shouldOverride;
+					DhApi.Delayed.renderProxy.setDeferTransparentRendering(isPackInUse && shouldOverride);
+					DhApi.Delayed.configs.graphics().fog().drawMode().setValue(isPackInUse && shouldOverride ? EDhApiFogDrawMode.FOG_DISABLED : null);
+				}
+				wasPackInUsePreviousFrame = isPackInUse;
 			}
 		};
 
