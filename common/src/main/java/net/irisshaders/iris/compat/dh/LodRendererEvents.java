@@ -81,18 +81,29 @@ public class LodRendererEvents {
 
 
 	private static void setupSetDeferredBeforeRenderingEvent() {
+		// Hacky solution for the "Use DH Fog Toggle" to only force disable when shaders are enabled by .Zonix. on Discord (17/02/2025)
 		DhApiBeforeRenderEvent beforeRenderEvent = new DhApiBeforeRenderEvent() {
 			// this event is called before DH starts any rendering prep
 			// canceling it will prevent DH from rendering for that frame
 			@Override
 			public void beforeRender(DhApiCancelableEventParam<DhApiRenderParam> event) {
-				var isPackInUse = Iris.isPackInUseQuick();
-				if (wasPackInUsePreviousFrame != isPackInUse) {
-					var shouldOverride = getInstance().shouldOverride;
-					DhApi.Delayed.renderProxy.setDeferTransparentRendering(isPackInUse && shouldOverride);
-					DhApi.Delayed.configs.graphics().fog().drawMode().setValue(isPackInUse && shouldOverride ? EDhApiFogDrawMode.FOG_DISABLED : null);
+				// Check the current frame usage state.
+				boolean isPackInUse = Iris.isPackInUseQuick();
+				EDhApiFogDrawMode playerConfigValue = DhApi.Delayed.configs.graphics().fog().drawMode().getTrueValue();
+
+				if (wasPackInUsePreviousFrame != isPackInUse || playerConfigValue != previousFramePlayerConfigValue) {
+					// Mark the prior frame usage state.
+					wasPackInUsePreviousFrame = isPackInUse;
+					previousFramePlayerConfigValue = playerConfigValue;
+
+					// Update DH related features.
+					DhApi.Delayed.renderProxy.setDeferTransparentRendering(isPackInUse);
+					DhApi.Delayed.configs.graphics().fog().drawMode().setValue(isPackInUse ? EDhApiFogDrawMode.FOG_DISABLED : playerConfigValue);
+					/* TODO: Here force the DH UI to update.
+						Reason: The UI doesn't show the updated value after clicking if it did change so the UI will always remain one-click behind the actual value
+								until the page is either closed/reloaded.
+					*/
 				}
-				wasPackInUsePreviousFrame = isPackInUse;
 			}
 		};
 
