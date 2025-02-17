@@ -41,6 +41,7 @@ public class LodRendererEvents {
 	private static int textureWidth;
 	private static int textureHeight;
 	private static boolean wasPackInUsePreviousFrame = false;
+	private static EDhApiFogDrawMode previousFramePlayerConfigValue;
 
 
 	// constructor //
